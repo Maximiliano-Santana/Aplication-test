@@ -45,6 +45,11 @@ loadingManager.onProgress = (progress)=>{
 const textureLoader = new THREE.TextureLoader(loadingManager);
 const fbxLoader = new FBXLoader(loadingManager);
 
+let trailTextureColor = null
+textureLoader.load('./texture/PistaNorth.png', (texture)=>{
+  trailTextureColor = texture;
+});
+
 let car = null;
 fbxLoader.load('/model/s13.fbx', (fbx)=>{
   car = fbx.children[0];
@@ -63,6 +68,9 @@ renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(sizes.width, sizes.height);
 
+//Variables
+let planeMesh = null;
+
 function initProject(){
   
   //Controls 
@@ -79,11 +87,24 @@ function initProject(){
   scene.add(car)
   car.scale.set(1, 1, 1)
   car.position.set(0, 0, 0)
+
+  const planeGeometry = new THREE.PlaneGeometry(70, 70);
+  const planeMaterial = new THREE.MeshBasicMaterial({
+    map: trailTextureColor
+    
+  })
+  planeMesh = new THREE.Mesh(planeGeometry, planeMaterial)
+  planeMesh.rotation.x = -Math.PI/2
+  planeMesh.rotation.z = -Math.PI/2
+  planeMesh.position.y = -0.25
+  
+
+  scene.add(planeMesh)
   
   //Line from coordinates  
   const vector2CoordinatesArray = []
   const vector3CoordinatesArray = []
-  let curveScale = 100000
+  let curveScale = 10000
 
   for (const coord of coordinates){
     vector2CoordinatesArray.push(new THREE.Vector2(coord[0]*curveScale, coord[1]*curveScale));
@@ -92,9 +113,9 @@ function initProject(){
 
 
   //--------CatmulRomCurve
-  const curve = new THREE.CatmullRomCurve3(vector3CoordinatesArray, true, 'chordal');
+  const curve = new THREE.CatmullRomCurve3(vector3CoordinatesArray, true, 'catmullrom', 1);
   
-  const points = curve.getPoints(90); // Cambia el valor para ajustar la cantidad de puntos en la línea
+  const points = curve.getPoints(200); // Cambia el valor para ajustar la cantidad de puntos en la línea
   
   const lineMaterial = new THREE.LineBasicMaterial( { color: 0xffffff} )
   const curveGeometry = new THREE.BufferGeometry().setFromPoints(points)
@@ -199,9 +220,21 @@ function initProject(){
 }
 
 function setGui(curveMesh, coordsLine){
+  const Deg360 = -Math.PI*2
+
   const gui = new GUI();
   gui.add(car, 'visible').name('car visible');
   gui.add(coordsLine, 'visible').name('coords');
   gui.add(curveMesh, 'visible').name('curve');
+
+  gui.add (planeMesh.scale, 'x', 0, (3.1415*2), 0.01).name('scale x').onChange((scale)=>{
+    planeMesh.scale.y = scale
+  })
+
+  gui.add (planeMesh.position, 'x', -50, 50).name('position x')
+  gui.add (planeMesh.position, 'z', -50, 50).name('position z')
+
+
+  gui.add (planeMesh.rotation, 'z', 0, (3.1415*2), 0.01);
 
 }
