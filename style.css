@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #3c3c3c;
+  overflow: hidden; 
+}
+
+/* This fix all the posible troubles that about full screnn in other browsers, versions, mac, etc. And the body with oveflow hidden*/
+.experience{ 
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline:none;
+}

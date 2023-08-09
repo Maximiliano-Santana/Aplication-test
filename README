@@ -1,0 +1,14 @@
+# Como realice el proyecto
+
+## Importing model
+Primero inicialice mi proyecto en vite y monte las instancias necesarias para crear un proyecto en three.js (camara, scene, renderer, canvas, etc)
+Posterior a esto procedi a importar el fbxLoader, cree su instancia pasandole un loadingManager para llevar control y saber en que momento se hayan cargado todos los recursos necesarios una vez que el loadingManager indique que todo ha sido cargado procedere a inicializar el proyecto. De esta forma evito cualquier tipo de incombentiente y controlo la carga de los archivos.
+
+Importe especificamente la malla del modelo fbx proveido, lo posicione y escale a una medidas correctas ademas que agregue luz de ambiente que el PhongMaterial con el que esta creado el modelo necesita para poder ser visualizado.
+
+## Creating a Line with the GPS Data
+
+Para crear una curva a partir de coordenadas dadas puedo utilizar la instancia de la clase Shape la cual crea una forma 2D utilizando trayectorias. El constructor recibe puntos, un arreglo de Vector2 el cual es opcional. Crea una forma a partir de puntos.
+
+Importe el arreglo de coordenadas desde otro archivo para tener un codigo mas limpio para crear la CatmullRomCurve3, esta instancia crea una curva suave desde una serie de puntos dados usando el algoritmo 'Catmull-Rom', cree una funcion la cual recorreria el arreglo de las coordenadas dadas y lo convertiria en un arreglo de objetos Vector3 el cual seria proveido a la CatmullRomCurve3. Tuve un problema y pasa que las coordenadas dadas habia muy poca diferencia entre ellas, esto quiere decir que obtenia una linea extremadamente pequeña, para arreglar esto simplemente multiplique el arreglo con las coordenadas en ambos ejes para escalar las coordenadas y que asi el bufferGeometry que crearia a continuacion contenga lascoordenadas ya escaladas
+Una vez creada la instancia CatmullRomCurve3, pude crear una geometria y una material y apartir de esto cree una linea visible en la escena, a partir de esta linea puedo crear la animacion que va seguir el auto. 
