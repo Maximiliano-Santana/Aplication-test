@@ -1,14 +1,12 @@
-# Como realice el proyecto
+How I Completed the Project
+Importing the Model
+I began by setting up my project using Vite and configuring the essential components for a Three.js project, including the camera, scene, renderer, canvas, and more. Following this, I imported the fbxLoader and established its instance, incorporating a loadingManager to monitor the loading process and determine when all the necessary assets had been loaded. Once the loadingManager signaled the completion of loading, I proceeded to initiate the project. This approach helped prevent any potential loading complications and allowed me to manage the loading of files effectively.
 
-## Importing model
-Primero inicialice mi proyecto en vite y monte las instancias necesarias para crear un proyecto en three.js (camara, scene, renderer, canvas, etc)
-Posterior a esto procedi a importar el fbxLoader, cree su instancia pasandole un loadingManager para llevar control y saber en que momento se hayan cargado todos los recursos necesarios una vez que el loadingManager indique que todo ha sido cargado procedere a inicializar el proyecto. De esta forma evito cualquier tipo de incombentiente y controlo la carga de los archivos.
+Specifically, I imported the mesh of the provided FBX model, arranged its position, and adjusted its scale to the appropriate dimensions. Additionally, I introduced ambient lighting, essential for visualizing the model due to the PhongMaterial utilized in its creation.
 
-Importe especificamente la malla del modelo fbx proveido, lo posicione y escale a una medidas correctas ademas que agregue luz de ambiente que el PhongMaterial con el que esta creado el modelo necesita para poder ser visualizado.
+Creating a Line with GPS Data
+For generating a curve from the given coordinates, I employed the Shape class's instance. This class facilitates the creation of 2D shapes using paths. The constructor accepts points, which is an optional array of Vector2 objects. By providing these points, a shape can be constructed.
 
-## Creating a Line with the GPS Data
+To ensure a smooth curve generation, I imported the array of coordinates from another file. By employing the CatmullRomCurve3 instance, a seamless curve is formed using a series of specified points. This is achieved through the application of the 'Catmull-Rom' algorithm. I devised a function to iterate through the array of coordinates, converting them into an array of Vector3 objects. These Vector3 objects were subsequently used as input for the CatmullRomCurve3 instance. I encountered an issue related to the minimal differentiation between the provided coordinates, leading to an excessively small line. To address this, I mitigated the issue by multiplying the coordinate array values in both axes. Consequently, the bufferGeometry created afterward featured scaled coordinates.
 
-Para crear una curva a partir de coordenadas dadas puedo utilizar la instancia de la clase Shape la cual crea una forma 2D utilizando trayectorias. El constructor recibe puntos, un arreglo de Vector2 el cual es opcional. Crea una forma a partir de puntos.
-
-Importe el arreglo de coordenadas desde otro archivo para tener un codigo mas limpio para crear la CatmullRomCurve3, esta instancia crea una curva suave desde una serie de puntos dados usando el algoritmo 'Catmull-Rom', cree una funcion la cual recorreria el arreglo de las coordenadas dadas y lo convertiria en un arreglo de objetos Vector3 el cual seria proveido a la CatmullRomCurve3. Tuve un problema y pasa que las coordenadas dadas habia muy poca diferencia entre ellas, esto quiere decir que obtenia una linea extremadamente pequeña, para arreglar esto simplemente multiplique el arreglo con las coordenadas en ambos ejes para escalar las coordenadas y que asi el bufferGeometry que crearia a continuacion contenga lascoordenadas ya escaladas
-Una vez creada la instancia CatmullRomCurve3, pude crear una geometria y una material y apartir de esto cree una linea visible en la escena, a partir de esta linea puedo crear la animacion que va seguir el auto. 
+With the CatmullRomCurve3 instance established, I proceeded to create a geometry and a corresponding material. This allowed for the formation of a visible line within the scene. Capitalizing on this line, I constructed an animation that guides the car along its path, ensuring alignment with the line's direction and encompassing the entire curve.
