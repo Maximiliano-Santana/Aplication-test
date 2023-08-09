@@ -90,33 +90,36 @@ function initProject(){
     vector3CoordinatesArray.push(new THREE.Vector3(coord[0]*curveScale, 0, coord[1]*curveScale));
   }
 
-  const curve = new THREE.CatmullRomCurve3(vector3CoordinatesArray, true, 'chordal');
 
+  //--------CatmulRomCurve
+  const curve = new THREE.CatmullRomCurve3(vector3CoordinatesArray, true, 'chordal');
   
   const points = curve.getPoints(90); // Cambia el valor para ajustar la cantidad de puntos en la línea
   
-
-  const curveMaterial = new THREE.LineBasicMaterial( { color: 0xffffff} )
+  const lineMaterial = new THREE.LineBasicMaterial( { color: 0xffffff} )
   const curveGeometry = new THREE.BufferGeometry().setFromPoints(points)
   curveGeometry.center();
-
-  const curveMesh = new THREE.Line(curveGeometry, curveMaterial)
-
+  
+  const curveMesh = new THREE.Line(curveGeometry, lineMaterial)
 
   scene.add(curveMesh)
-
+  
+  //--------Coordinates curve
+  
   const coordsShape = new THREE.Shape(vector2CoordinatesArray);
   coordsShape.closePath();
-
-  const coordsLineMaterial = new THREE.LineBasicMaterial( { color: 0xffffff} )
+  
   const coordsLineGeometry = new THREE.BufferGeometry().setFromPoints(coordsShape.getPoints());
   coordsLineGeometry.center();
-
-  const coordsLine = new THREE.Line(coordsLineGeometry, coordsLineMaterial);
+  
+  const coordsLine = new THREE.Line(coordsLineGeometry, lineMaterial);
   coordsLine.rotation.x = Math.PI/2;
   scene.add(coordsLine)
   coordsLine.visible = false;
+  
 
+
+  
   //Car initial position
 
   car.position.x = curveMesh.geometry.attributes.position.array[0]
@@ -145,16 +148,12 @@ function initProject(){
     car.rotation.x = -Math.PI/2
     car.rotation.z = Math.PI
 
-
-    //gsap.to(car.rotation,){}
     gsap.to(car.position, {duration: 0.5, delay: 0, ease:'linear' ,x: curveMesh.geometry.attributes.position.array[index*3+0]});
     gsap.to(car.position, {duration: 0.5, delay: 0, ease:'linear' ,y: curveMesh.geometry.attributes.position.array[index*3+1]});
     gsap.to(car.position, {duration: 0.5, delay: 0, ease:'linear' ,z: curveMesh.geometry.attributes.position.array[index*3+2]})
       .then(()=>{
-        console.log(index)
         index++;
       if (index >= curveMesh.geometry.attributes.position.array.length/3){
-        console.log('finall')
         index = 0;
       }
       animateCar();   
